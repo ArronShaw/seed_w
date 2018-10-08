@@ -378,6 +378,24 @@ traverse_topdown( vtree_t *v, interval2_t *i0 )
 
 }
 
+
+void concatenate(dstring_t *T, alphabet_t *a, char *seq, int seq_index, int *ptr)
+{
+  int i, n = strlen( seq );
+	
+  for ( i=0; i<n; i++ ){
+  T->text[ *ptr ] = dev_encode( a, seq[ i ]);
+  printf ("i = %d " , *ptr);
+  printf ("Text is :%d\n", T->text[ *ptr ]);
+  *ptr += 1;//global_ptr ++
+  }
+  // T->text[ *ptr ] = 0 - seq_index; /* terminator */ 
+  T->text[ *ptr ] = a->size + 1;
+  printf ("i = %d " , *ptr);
+  printf ("Text is :%d\n", T->text[ *ptr]);
+  *ptr += 1;
+}
+
 /*****************************************************************
  * main - main program                                           *
  *****************************************************************/
@@ -386,6 +404,32 @@ int
 main( void )
 {
   char *s1 = "mississippi", *s2 = "acaaacatat";
+  int i, len1 = strlen( s1 ), len2 = strlen( s2 );
+  int k = 2, total_length = len1 + len2 + k;
+  int *ptr = (int*) dev_malloc(sizeof(int));
+  dstring_t *dstring;
+  vtree_t *v;
+  dstring = ( dstring_t * ) dev_malloc( sizeof( dstring_t ) );
+  dstring->text = ( symbol_t * ) dev_malloc( (len1+1) * sizeof( symbol_t ) );
+  dstring->length = len1 + 1;
+  dstring->alphabet = &lowercase;
+  // char *s1 = "AABC", *s2 = "BCDC", *s3 = "BCDE", *s4 = "CDED";
+  // char *insert_char = {'%','&','*','^'};
+  *ptr = 0;
+  dev_init();
+  // banner();
+  // generate_and_test();
+  dstring_t *ds1, *ds2, *dt;
+  // concatenate( dstring, &lowercase, s1, 1, ptr);
+  
+  // concatenate( dstring, &lowercase, s2, 2, ptr);
+  printf("%d", *ptr);
+  // vtree_create( dstring );
+  printf("test");
+  // display2( s1, dstring, v );
+
+
+/*
   dstring_t *ds, *pattern;
   vtree_t *v;
   vector_t *rs, *nodes;
@@ -399,10 +443,10 @@ main( void )
 
   ds = dev_digitalize( &lowercase, s1 );//transform strings into digital num
   v = vtree_create( ds );
-  // display2( s1, ds, v );
+  display2( s1, ds, v );
 
-  // vtree_free( v );
-/* 
+  vtree_free( v );
+
   ds = dev_digitalize( &lowercase, s2 );
   v = vtree_create( ds );
   display2( s2, ds, v );
@@ -419,7 +463,7 @@ main( void )
 
   printf( "\n:: top down\n" );
 
-  // traverse_topdown( v, new_interval2( 0, v->length ) );
+  traverse_topdown( v, new_interval2( 0, v->length ) );
 
   printf( "\n:: exact match\n" );
 

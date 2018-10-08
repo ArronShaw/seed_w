@@ -44,7 +44,7 @@ CC = gcc
 # add -lmalloc tp LDFLAGS
 # However, this extremely slows down the execution time
 
-CFLAGS = -O -std=c99
+CFLAGS = -g -O -std=c99
 
 AR = ar
 RANLIB = ranlib

@@ -547,7 +547,7 @@ dev_digitalize( alphabet_t *a, char *seq )
     printf ("i = %d " , i);
     printf ("Text is :%d\n", dstring->text[ i ]);
   }
-  dstring->text[ n ] = a->size; /* terminator */
+  dstring->text[ n ] = a->size + 1; /* terminator */
 
   return dstring;
 }

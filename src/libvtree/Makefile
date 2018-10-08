@@ -25,7 +25,7 @@ INCDIR = -I../libdev -I./
 .c.o: 
 	$(CC) $(CFLAGS) $(INCDIR) -c $<
 
-all: libvtree.a
+all: libvtree.a tests seed_w
 
 libvtree.a: $(OBJECTS)
 	$(AR) rcvs libvtree.a $(OBJECTS)
@@ -33,7 +33,10 @@ libvtree.a: $(OBJECTS)
 	chmod 644 libvtree.a
 
 tests: tests.o libvtree.a
-	$(CC) -o tests tests.o $(LIBDIR) $(CFLAGS) $(LIBS) -lm
+	$(CC) -g -o tests tests.o $(LIBDIR) $(CFLAGS) $(LIBS) -lm
+
+seed_w: seed_w.o libvtree.a
+	$(CC) -g -o seed_w seed_w.o $(LIBDIR) $(CFLAGS) $(LIBS) -lm
 
 check: tests
 	time -p ./tests
