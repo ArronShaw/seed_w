@@ -1,7 +1,12 @@
-Seed - library and tools to explore RNA secondary structure motifs space
-Truong Nguyen and Marcel Turcotte (C) 2003-18 University of Ottawa
+seed_w - library and tools to explore consensus word-based motifs
+Weipeng Xu and Marcel Turcotte (C) 2018-19 University of Ottawa
 
 Contact:
+
+Weipeng Xu
+University of Ottawa, ON, Canada
+
+wxu028@uottawa.ca
 
 Marcel Turcotte
 School of Electrical Engineering and Computer Science (EECS)
@@ -13,3 +18,5 @@ Canada
 marcel.turcotte@uottawa.ca
 
 bio.site.uottawa.ca/software/seed
+
+
