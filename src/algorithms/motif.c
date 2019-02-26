@@ -453,6 +453,8 @@ match_edge( vtree_t *v,
 
     if ( offset >= e->length ) {
 
+      
+
       result = match_edge( v, interval, e->adjacent, pos, 0, m, save_all, decision_mode, sbuf, bbuf, ibuf, stack, matches, params );
 
       if ( ( ( ! result ) || ( save_all ) ) && ( offset < e->length + params->range ) ) {

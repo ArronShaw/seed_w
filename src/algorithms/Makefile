@@ -12,10 +12,12 @@
 SHELL = /bin/sh
 
 OBJECTS = seed.o ida.o stems.o motif.o misc.o
+SEED_W_OBJECTS = seed_w.o match_w.o kfunc.o
 
 BINARIES = seed find match
+#  match_w
 
-LIBS = -lbio -lvtree -ldev
+LIBS = -lbio -lvtree -ldev -lm
 LIBDIR = -L../libbio -L../libvtree -L../libdev
 INCDIR = -I../libbio -I../libvtree -I../libdev
 
@@ -30,6 +32,15 @@ all: $(BINARIES)
 seed: $(OBJECTS)
 	$(CC) -o seed $(OBJECTS) $(CFLAGS) $(LIBDIR) $(RNALIB_LIB) $(LDFLAGS) $(LIBS) $(RNALIB_LIBS)
 
+seed_w: $(SEED_W_OBJECTS)
+	$(CC) -o seed_w $(SEED_W_OBJECTS) $(CFLAGS) $(LIBDIR) $(LIBS)
+
+kfunc: kfunc.o
+	$(CC) -o kfunc kfunc.o $(LIBS)
+
+match_w: match_w.o
+	$(CC) -o match_w match_w.o $(CFLAGS) $(LIBDIR) $(LDFLAGS) $(LIBS)
+
 find:  find.o
 	$(CC) -o find find.o $(CFLAGS) $(LIBDIR) $(LDFLAGS) $(LIBS)
 
@@ -38,8 +49,9 @@ match:  match.o
 
 install: $(BINARIES)
 	cp $(BINARIES) $(BIN_DIR)
+
 check:
 	true
 
 clean:
-	rm -f $(OBJECTS) *~ seed find find.o match match.o
+	rm -f $(OBJECTS) $(SEED_W_OBJECTS) *~ seed seed_w test find find.o match match.o match_w match_w.o kfunc kfunc.o

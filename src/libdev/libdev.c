@@ -544,10 +544,10 @@ dev_digitalize( alphabet_t *a, char *seq )
 
   for ( i=0; i<n; i++ ){
     dstring->text[ i ] = dev_encode( a, seq[ i ] );//transform strings into digital num
-    printf ("i = %d " , i);
-    printf ("Text is :%d\n", dstring->text[ i ]);
+    // printf ("i = %d " , i);
+    // printf ("Text is :%d\n", dstring->text[ i ]);
   }
-  dstring->text[ n ] = a->size + 1; /* terminator */
+  dstring->text[ n ] = a->size; /* terminator */
 
   return dstring;
 }

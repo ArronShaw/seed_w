@@ -93,14 +93,14 @@ vtree_init( dstring_t *dtext )
   for ( int i=0; i<n; i++ )
     v->text[ i ] = dtext->text[ i ];
 
-  // v->text[ n ] = v->text[ n+1 ] = v->text[ n+2 ] = 0;
-  printf("test1\n");
+  v->text[ n ] = v->text[ n+1 ] = v->text[ n+2 ] = 0;
+
   v->length = dtext->length;
 
   v->alphabet_size = dtext->alphabet->size;
-  printf("test2\n");
+
   v->id = -1;
-  printf("test3\n");
+
   return v;
 }
 
@@ -347,7 +347,6 @@ radix_pass( pos_t *a, pos_t *b, pos_t *r, int n, int K )
 static void
 skew( pos_t *s, pos_t *SA, pos_t *ra, int n, int K )
 {
-  printf("test");
   pos_t n0 = ( n+2 )/3; /* number of mod 0 suffixes */
   pos_t n1 = ( n+1 )/3; /* number of mod 1 suffixes */
   pos_t n2 = n/3;       /* number of mod 2 suffixes */
@@ -401,7 +400,7 @@ skew( pos_t *s, pos_t *SA, pos_t *ra, int n, int K )
       s12[ SA12[ i ]/3 + n0 ] = name; /* right half */
 
   }
-  printf("test");
+
   /* If the highest name assigned is less than the size of the mod 2 
    * suffix array, recursively apply skew. 
    */
@@ -409,7 +408,7 @@ skew( pos_t *s, pos_t *SA, pos_t *ra, int n, int K )
   if( name < n02 ) {
 
     skew( s12, SA12, ra, n02, name );
-    printf("skew");
+
     for( int i = 0; i < n02; i++ )
       s12[ SA12[ i ] ] = i + 1;
 
@@ -509,16 +508,15 @@ vtree_create( dstring_t *dtext )
 {
   vtree_t *v;
 
-  // v = vtree_init( dtext );
-  printf ("vtree_init");
-  // create_suffix_array( v, dtext );
-  // printf ("dstring->length = %d", dtext->length);
-  printf ("create_suffix_array");
-  // create_lcp_array( v );//Longest common prefix
+  v = vtree_init( dtext );
 
-  // create_bw_array( v );//computes the Burrows and Wheeler transfor
+  create_suffix_array( v, dtext );
 
-  // create_childtab( v );//Child table
+  create_lcp_array( v );//Longest common prefix
+
+  create_bw_array( v );//computes the Burrows and Wheeler transfor
+
+  create_childtab( v );//Child table
 
   /*
    * TREAP_createTreap( suffInfo->adjLcpArray, suffInfo->len, treapInfo );

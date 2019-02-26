@@ -113,6 +113,8 @@ extern pos_t vtree_getlcp( vtree_t *v, pos_t i, pos_t j );
 
 extern void vtree_find_exact_match( vtree_t *v, dstring_t *p );
 
+extern int vtree_find_exact_match_new( vtree_t *v, dstring_t *p );
+
 /*****************************************************************
  * vtree_get_childtab_up - wrapper returning childtab.up         *
  * vtree_get_childtab_down - wrapper returning childtab.down     *

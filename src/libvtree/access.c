@@ -2,8 +2,8 @@
  * access.c --- access functions for an enhanced suffix array (vtree)
  * Author          : Truong Nguyen and Marcel Turcotte
  * Created On      : Mon Jun 20 20:09:40 2005
- * Last Modified By: Marcel Turcotte
- * Last Modified On: Fri Jul 15 14:01:07 2005
+ * Last Modified By: turcotte
+ * Last Modified On: Tue Nov 20 09:49:51 2018
  *
  * This copyrighted source code is freely distributed under the terms
  * of the GNU General Public License. 
@@ -414,6 +414,10 @@ vtree_find_exact_match( vtree_t *v, dstring_t *p )
 
   interval = vtree_getInterval( v, 0, v->length, p->text[ c ], NULL );
 
+  if ( interval == NULL ) {
+    queryFound = FALSE;
+  }
+
   while ( ( interval != NULL ) && ( c < m ) && ( queryFound ) ) {
 
     i = interval->i;
@@ -430,11 +434,19 @@ vtree_find_exact_match( vtree_t *v, dstring_t *p )
 
       c = min;
 
-      interval = vtree_getInterval( v, i, j,  p->text[ c ], NULL );
+      if ( c < m ) {
+
+	interval = vtree_getInterval( v, i, j,  p->text[ c ], NULL );
+
+	if ( interval == NULL ) {
+	  queryFound = FALSE;
+	}
+
+      }
 
     } else {
 
-      for ( pos_t k=c; k < m && queryFound; k++ )
+      for ( pos_t k=c+1; k < m && queryFound; k++ )
 	if ( v->text[ v->suftab[ i ] + k ] != p->text[ k ] )
 	  queryFound = FALSE;
       c = m; /* forces exit */
@@ -459,3 +471,62 @@ vtree_find_exact_match( vtree_t *v, dstring_t *p )
   }
 }
 
+int
+vtree_find_exact_match_new( vtree_t *v, dstring_t *p )
+{
+  int c=0;
+  int queryFound = TRUE;
+  interval2_t *interval;
+  pos_t i, j, m = p->length;
+
+  interval = vtree_getInterval( v, 0, v->length, p->text[ c ], NULL );
+
+  if ( interval == NULL ) {
+    queryFound = FALSE;
+  }
+
+  while ( ( interval != NULL ) && ( c < m ) && ( queryFound ) ) {
+
+    i = interval->i;
+    j = interval->j;
+
+    if ( i != j ) {
+
+      pos_t l = vtree_getlcp( v, i, j );
+      pos_t min = MIN( l, m );
+
+      for ( pos_t k=c; k < min && queryFound; k++ )
+	if ( v->text[ v->suftab[ i ] + k ] != p->text[ k ] )
+	  queryFound = FALSE;
+
+      c = min;
+
+      if ( c < m ) {
+  dev_free( interval );
+	interval = vtree_getInterval( v, i, j,  p->text[ c ], NULL );
+
+	if ( interval == NULL ) {
+	  queryFound = FALSE;
+	}
+
+      }
+
+    } else {
+
+      for ( pos_t k=c+1; k < m && queryFound; k++ )
+	if ( v->text[ v->suftab[ i ] + k ] != p->text[ k ] )
+	  queryFound = FALSE;
+      c = m; /* forces exit */
+    }
+  }
+  
+  dev_free( interval );
+
+  if ( ! queryFound ) {
+    // printf( "pattern P not found" );
+    return 0;
+  } else {
+    // printf( "query found a position(s): " );
+    return 1;
+  }
+}
