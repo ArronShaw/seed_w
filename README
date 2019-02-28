@@ -26,8 +26,13 @@ cd ./seed_w
 make clean
 make
 
+##For seed_w
 cd src/algorithms/
 make seed_w
 
+##For test.c
+gcc -o test test.c
+
 cd ../../examples_seed_w/01_one_word
 ./run.sh
+
