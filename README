@@ -37,3 +37,14 @@ gcc -o test test.c
 cd ../../examples_seed_w/01_one_word
 ./run.sh
 
+cd ../../examples_seed_w/02_two_words
+./run.sh
+
+cd ../../examples_seed_w/03_three_words
+./run.sh
+
+cd ../../examples_seed_w/04_long_seqs
+./run.sh
+
+cd ../../examples_seed_w/05_HSL3
+./run.sh
