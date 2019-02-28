@@ -20,7 +20,7 @@ marcel.turcotte@uottawa.ca
 bio.site.uottawa.ca/software/seed
 
 
-### Generic Build Instructions
+## Generic Build Instructions
 
 cd ./seed_w
 make clean
@@ -32,6 +32,7 @@ make seed_w
 
 ##For test.c
 gcc -o test test.c
+./test
 
 cd ../../examples_seed_w/01_one_word
 ./run.sh
