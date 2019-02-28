@@ -1,3 +1,14 @@
+/*
+* 
+* @Author: Weipeng Xu
+* @Date:   2019-02-27 21:28:30
+* @Last Modified by:   Weipeng Xu
+* @Last Modified time: 2019-02-27 21:28:42
+*
+* This copyrighted source code is freely distributed under the terms
+* of the GNU General Public License. 
+* See the files COPYRIGHT and LICENSE for details.
+*/
 #include "libdev.h"
 #include "seq.h"
 #include "stems.h"
@@ -90,8 +101,8 @@ int match_motif(dstring_t *ds_seed, interval2_t *i0, vtree_t *v, motif *m){
 	//expect TRUE/FALSE indeicate if a motif is exist in a vtree or not
 	//mismatch are not allowed in this version 1.0, will be improved in 1.1 version
 	
-
 	return match_node(ds_seed, v, i0, m->head, 0, 0);
+	
 }
 
 void print_expression(char *seed, expression *e){

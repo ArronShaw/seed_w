@@ -1,22 +1,17 @@
-/*                               -*- Mode: C -*- 
- * seed.h --- RNA secondary structure motif inference
- * Author          : Truong Nguyen and Marcel Turcotte
- * Created On      : Thu Jul  7 13:31:36 2005
- * Last Modified By: Marcel Turcotte
- * Last Modified On: Fri Aug  5 18:01:08 2005
- *
- * This copyrighted source code is freely distributed under the terms
- * of the GNU General Public License. 
- * See the files COPYRIGHT and LICENSE for details.
- */
-
-// #ifndef SEED_H
-// #define SEED_H
+/*
+* 
+* @Author: Weipeng Xu
+* @Date:   2019-02-27 21:18:06
+* @Last Modified by:   Weipeng Xu
+* @Last Modified time: 2019-02-27 21:18:06
+*
+* This copyrighted source code is freely distributed under the terms
+* of the GNU General Public License. 
+* See the files COPYRIGHT and LICENSE for details.
+*/
 
 #include "libvtree.h"
 #include <sys/types.h>
-
-// typedef struct expression expression;
 
 enum type
 {

@@ -1,14 +1,15 @@
-/*                               -*- Mode: C -*- 
- * seed_w.c --- seed_w main
- * Author          : Truong Nguyen, Marcel Turcotte and Weipeng Xu 
- * Created On      : Thu Jun 16 11:25:30 2005
- * Last Modified By: Weipeng
- * Last Modified On: Wed Feb 21 14:00:33 2018 
- *
- * This copyrighted source code is freely distributed under the terms
- * of the GNU General Public License. 
- * See the files COPYRIGHT and LICENSE for details.
- */
+/*
+* 
+* @Author: Weipeng Xu
+* @Date:   2019-02-26 16:05:39
+* @Last Modified by:   Weipeng Xu
+* @Last Modified time: 2019-02-27 21:19:12
+*
+* This copyrighted source code is freely distributed under the terms
+* of the GNU General Public License. 
+* See the files COPYRIGHT and LICENSE for details.
+*/
+
 
 #include "libdev.h"
 #include "seq.h"
@@ -35,7 +36,7 @@ int NUM_INPUT_STRING_NEG; // Number of Negative Input Strings
 static void
 display_banner(parameters_t *params)
 {
-  printf("%s - RNA structure motif inference\n\n", params->version);
+  printf("%s - Identification of consensus word-based motifs inference\n\n", params->version);
 
   printf("Copyright (C) 2019 University of Ottawa\n");
   printf("All Rights Reserved\n");
@@ -51,7 +52,7 @@ display_banner(parameters_t *params)
 
 static char usage[] = "\
 Usage: seed_w [options] file_pos file_neg\n\
-where file is a FASTA file that contains k input RNA sequences.\n\
+where file is a FASTA file that contains k input DNA/RNA sequences.\n\
 \n\
 Options:\n\
      --min_support <n>         (default 0.70)\n\
@@ -110,7 +111,7 @@ void dev_free_vtree_array( void**p, int size, int func)
     vtree_free(p[i]);
 
   //free the array
-  if(func == TRUE)dev_free(p);//Some problem in here
+  if(func == TRUE)dev_free(p);
 }
 
 
@@ -214,7 +215,6 @@ display2(char *s, dstring_t *ds, vtree_t *v)
 {
   printf("\n");
 
-  // printf( "      s  ds  sa  ra lcp  bw   ^   v   > \n" );
   printf("      s  ds suf lcp  \n");
 
   for (int i = 0; i < ds->length; i++)
@@ -231,14 +231,7 @@ display2(char *s, dstring_t *ds, vtree_t *v)
     printf("[%2c]", c);
     printf("[%2d]", ds->text[i]);
     printf("[%2d]", v->suftab[i]);
-    // printf( "[%2d]", v->isuftab[ i ] );
     printf("[%2d]", v->lcptab[i]);
-    // printf( "[%2d]", v->strindextab[ i ] );
-    // printf( "[%2d]", v->bwtab[ i ] );
-    // printf( "[%2d]", v->childtab[ i ].up );
-    // printf( "[%2d]", v->childtab[ i ].down );
-    // printf( "[%2d]", v->childtab[ i ].next );
-
     printf(" ");
 
     for (int j = v->suftab[i]; j < v->length; j++)
@@ -504,7 +497,7 @@ void get_neg_support(dstring_t *ds_seed, vtree_t *vtree[], vector_t *motif_list,
 int motif_index_com(motif *m1, motif *m2)
 {
   //The last expression of any motif should always be a word
-  //Since the range is meaningless if there are no words after it
+  //Since the range at the end is meaningless if there are no words after it
   //Return TRUE if the index of m1's last expression
   //is before the index of m2's first expression, otherwise return FALSE
   if (m1 == m2)
@@ -558,18 +551,14 @@ motif_discovery(dstring_t *ds_seed, vector_t *motif_list, vtree_t *vtree[], int 
         // determine if j's index in the seed sequence is greater than i's last word's index
         if (motif_index_com(motif_i, motif_j))
         {
-          // print_motif(seed, motif_i, params);
-          // print_motif(seed, motif_j, params);
 
           new_motif = motif_concatenate(motif_i, motif_j);
-          // print_motif(seed, new_motif, params);
           
           cur_support = 0;
           if (has_enough_support(ds_seed, vtree, new_motif, &cur_support, params) == TRUE)
           {
             new_motif->num_match_pos = cur_support;
             
-            // print_motif(seed, new_motif, params);
             dev_vector_add(motif_list, new_motif);
 
             if (is_first_one)
@@ -616,7 +605,6 @@ motif_ranking(vector_t *motif_list)
   }
 }
 
-// motif_to_string( m, &seq, &sec );
 
 /*****************************************************************
  * save_motifs - output all motifs to a designated file          *
@@ -640,7 +628,6 @@ void save_motifs(char seed[], vector_t *motif_list, parameters_t *params)
     fprintf(fh, "  <motif id=\"%d\" offset=\"%d\" pvalue=\"%.4e\">\n", i, ((expression *)(m->head))->begin_index, m->p_value);
 
     char *word;
-    // word_to_string( m, &word);
 
     expression *e = m->head;
     int index = 0;
@@ -715,7 +702,6 @@ int main(int argc, char *argv[])
     ds = dev_digitalize(&uppercase, seqs_pos[i]);
     vtree[i] = vtree_create(ds);
     dev_free_dstring( ds );
-    // display2(seqs_pos[i], ds, vtree[i]);
   }
   printf("------ Phase 1 : Word Enumeration------ \n");
   vector_t *motif_list = words_enumerate(seqs_pos[0], vtree, &params);
@@ -741,13 +727,13 @@ int main(int argc, char *argv[])
   
   vtree = (vtree_t **) malloc(NUM_INPUT_STRING_NEG * sizeof(vtree_t *));
 
-  // read the negative data set and create vtree list
   for(int i=0; i<NUM_INPUT_STRING; i++){
+  // read the negative data set and create vtree list
     ds = dev_digitalize(&uppercase, seqs_neg[i]);
     vtree[i] = vtree_create(ds);
     dev_free_dstring( ds );
-    // vtree_print_tables(&uppercase, vtree[i]);
   }
+
   /* travel through negative set and record support for each motifs */
   printf("------ Phase 3 : Get Support for Negative dataset ------ \n");
   
@@ -763,7 +749,7 @@ int main(int argc, char *argv[])
   //   print_motif(seqs_pos[0], (motif*)dev_vector_get(motif_list, i),  &params);
   // }
 
-  // /*motif ranking*/
+  /*motif ranking*/
   printf("------ Phase 4 : motif_ranking ------ \n");
   motif_ranking(motif_list);
 
@@ -775,9 +761,11 @@ int main(int argc, char *argv[])
     }
   else printf("match file is NULL, motifs will not be saved;\nIf you wish to save matches, please specify a match file path.\n");
 
-  // Cleanup
+  /* post-processings */
   printf("------ Clean up ------ \n");
+  
   dev_free_vector( motif_list,  ( void ( * )( void * ) ) dev_free_motif );
   dev_free_dstring(ds_seed);
+  
   exit(EXIT_SUCCESS);
 }

@@ -1,9 +1,22 @@
+/*
+* 
+* @Author: Weipeng Xu
+* @Date:   2019-02-27 21:07:49
+* @Last Modified by:   Weipeng Xu
+* @Last Modified time: 2019-02-27 23:34:10
+*
+* This copyrighted source code is freely distributed under the terms
+* of the GNU General Public License. 
+* See the files COPYRIGHT and LICENSE for details.
+*/
+
+
 #include "stdio.h"
 #include "string.h"
 #include <time.h>
 #include <stdlib.h>
 
-#define MAX_RANDOM 5000
+#define MAX_RANDOM 1000
 #define WORD_LENGTH 10
 #define MAX_WORD_NUM 100
 #define TRUE 1
@@ -84,30 +97,18 @@ void test(int str_num, int min_support_num, int word_num, char *filename){
 
 void main(int argc, char *argv[]){
 	// parameters =  str_num, min_support_num, word_num, filename
-
-	// test(10000, 10000, 1, "test0_pos.fas");
-
-	// test(10000, 6000, 1, "test1_pos.fas");
-
-	// test(10000, 5000, 2, "test2_pos.fas");
-
-	// test(10000, 5000, 3, "test3_pos.fas");
-
-	// test(10000, 5000, 3, "test4_pos.fas");
-
-	// test(10000, 100, 3, "test4_neg_1.fas");
-
-	// test(10000, 1000, 3, "test4_neg_2.fas");
-
-	// test(10000, 2000, 3, "test4_neg_3.fas");
-
-	// test(10000, 4000, 3, "test4_neg_4.fas");
-
-	// test(10000, 8000, 3, "test4_pos_5.fas");
 	
-	// test(10000, 8000, 3, "test4_neg_5.fas");
+	test(1000, 1000, 1, "test_pos.fas"); // example test_01
 
-	// test(10000, 5000, 3, "test5_pos.fas");
+	// test(10000, 5000, 2, "test_pos.fas"); // example test_02
 
-	// test(10000, 100, 3, "test5_neg.fas");
+	// test(10000, 6000, 3, "test_pos.fas"); // example test_03 positive dateset
+
+	// test(10000, 4000, 3, "test_neg.fas"); // example test_03 negative dateset
+
+	// Before running the following test, please modify 
+	// the MAX_RANDOM = 5000 in the top of this file
+
+	// test(10000, 5000, 3, "test_pos.fas"); // example test_04
+
 }

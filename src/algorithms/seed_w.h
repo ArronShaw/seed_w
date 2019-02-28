@@ -1,8 +1,14 @@
-// #include "libvtree.h"
-// #include <sys/types.h>
-// #define VERSION "1.0"
-
-
+/*
+* 
+* @Author: Weipeng Xu
+* @Date:   2019-02-27 21:18:06
+* @Last Modified by:   Weipeng Xu
+* @Last Modified time: 2019-02-27 21:18:06
+*
+* This copyrighted source code is freely distributed under the terms
+* of the GNU General Public License. 
+* See the files COPYRIGHT and LICENSE for details.
+*/
 
 /*****************************************************************
  * param_t -                                                     *
@@ -31,4 +37,3 @@ typedef struct {
 #define VERSION "SEED_W   v1.0"
 #define VECTOR_INI_CAP 1000 //vector initial capacity
 #define INCREMENT 1000 // increment
-// extern vector_t *words_enumerate(char seed[], vtree_t *vtree[], int control)
