@@ -20,3 +20,14 @@ marcel.turcotte@uottawa.ca
 bio.site.uottawa.ca/software/seed
 
 
+### Generic Build Instructions
+
+cd ./seed_w
+make clean
+make
+
+cd src/algorithms/
+make seed_w
+
+cd ../../examples_seed_w/01_one_word
+./run.sh
