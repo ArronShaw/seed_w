@@ -1,0 +1,13 @@
+<motifs>
+  <motif id="0" offset="19864" pvalue="7.3650e-106">
+    <word>CTGCCATGAT</word>
+  </motif>
+  <motif id="1" offset="19894" pvalue="7.3650e-106">
+    <word>CTGCCATGAT</word>
+  </motif>
+  <motif id="2" offset="19864" pvalue="1.9524e-117">
+    <word>CTGCCATGAT</word>
+    <range length="20"></range>
+    <word>CTGCCATGAT</word>
+  </motif>
+</motifs>

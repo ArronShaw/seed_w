@@ -1,0 +1,33 @@
+<motifs>
+  <motif id="0" offset="1000" pvalue="0.0000e+00">
+    <word>TTGGCCCCCT</word>
+  </motif>
+  <motif id="1" offset="1030" pvalue="0.0000e+00">
+    <word>TTGGCCCCCT</word>
+  </motif>
+  <motif id="2" offset="1060" pvalue="0.0000e+00">
+    <word>TTGGCCCCCT</word>
+  </motif>
+  <motif id="3" offset="1000" pvalue="0.0000e+00">
+    <word>TTGGCCCCCT</word>
+    <range length="20"></range>
+    <word>TTGGCCCCCT</word>
+  </motif>
+  <motif id="4" offset="1000" pvalue="0.0000e+00">
+    <word>TTGGCCCCCT</word>
+    <range length="50"></range>
+    <word>TTGGCCCCCT</word>
+  </motif>
+  <motif id="5" offset="1030" pvalue="0.0000e+00">
+    <word>TTGGCCCCCT</word>
+    <range length="20"></range>
+    <word>TTGGCCCCCT</word>
+  </motif>
+  <motif id="6" offset="1000" pvalue="0.0000e+00">
+    <word>TTGGCCCCCT</word>
+    <range length="20"></range>
+    <word>TTGGCCCCCT</word>
+    <range length="20"></range>
+    <word>TTGGCCCCCT</word>
+  </motif>
+</motifs>
