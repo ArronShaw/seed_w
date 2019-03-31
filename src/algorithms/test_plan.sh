@@ -1,7 +1,7 @@
 # @Author: Weipeng Xu
 # @Date:   2019-02-27 21:57:58
 # @Last Modified by:   Weipeng Xu
-# @Last Modified time: 2019-03-30 11:00:14
+# @Last Modified time: 2019-03-30 23:57:29
 
 str_len=(1000 2000 4000 8000 16000 32000)
 str_num=(100 200 400 800)
@@ -19,7 +19,8 @@ SEED_PARAMS="$SEED_PARAMS --word_length 10"
 SEED_PARAMS="$SEED_PARAMS --match_file ./test_files/str_len/save_motifs.xml"
 
 SEED_PARAMS="$SEED_PARAMS $DATA_POS $DATA_NEG"
-/usr/bin/time -o ./test_files/str_len/${i}.time -v ./seed_w $SEED_PARAMS > ./run.out
+# /usr/bin/time -o ./test_files/str_len/${i}.time -v ./seed_w $SEED_PARAMS > ./run.out
+(time ./seed_w $SEED_PARAMS) > ./run.out 2> ./test_files/str_len/${i}.time
 done
 
 for j in "${range[@]}"
@@ -33,7 +34,8 @@ SEED_PARAMS="$SEED_PARAMS --word_length 10"
 SEED_PARAMS="$SEED_PARAMS --match_file ./test_files/range/save_motifs.xml"
 
 SEED_PARAMS="$SEED_PARAMS $DATA_POS $DATA_NEG"
-/usr/bin/time -o ./test_files/range/${j}.time -v ./seed_w $SEED_PARAMS > ./run.out
+# /usr/bin/time -o ./test_files/range/${j}.time -v ./seed_w $SEED_PARAMS > ./run.out
+(time ./seed_w $SEED_PARAMS) > ./run.out 2> ./test_files/range/${j}.time
 done
 
 for k in "${str_num[@]}"
@@ -47,7 +49,8 @@ SEED_PARAMS="$SEED_PARAMS --word_length 10"
 SEED_PARAMS="$SEED_PARAMS --match_file ./test_files/str_num/save_motifs.xml"
 
 SEED_PARAMS="$SEED_PARAMS $DATA_POS $DATA_NEG"
-/usr/bin/time -o ./test_files/str_num/${k}.time -v ./seed_w $SEED_PARAMS > ./run.out
+# /usr/bin/time -o ./test_files/str_num/${k}.time -v ./seed_w $SEED_PARAMS > ./run.out
+(time ./seed_w $SEED_PARAMS) > ./run.out 2> ./test_files/str_num/${k}.time
 done
 
 for l in "${word_num[@]}"
@@ -61,7 +64,8 @@ SEED_PARAMS="$SEED_PARAMS --word_length 10"
 SEED_PARAMS="$SEED_PARAMS --match_file ./test_files/word_num/save_motifs.xml"
 
 SEED_PARAMS="$SEED_PARAMS $DATA_POS $DATA_NEG"
-/usr/bin/time -o ./test_files/word_num/${l}.time -v ./seed_w $SEED_PARAMS > ./run.out
+# /usr/bin/time -o ./test_files/word_num/${l}.time -v ./seed_w $SEED_PARAMS > ./run.out
+(time ./seed_w $SEED_PARAMS) > ./run.out 2> ./test_files/word_num/${l}.time
 done
 
 
@@ -74,7 +78,7 @@ SEED_PARAMS="$SEED_PARAMS --word_length 10"
 SEED_PARAMS="$SEED_PARAMS --match_file ./test_files/limit_test/save_motifs.xml"
 
 SEED_PARAMS="$SEED_PARAMS $DATA_POS $DATA_NEG"
-/usr/bin/time -o ./test_files/limit_test/limit_test.time -v ./seed_w $SEED_PARAMS > ./run.out
+# /usr/bin/time -o ./test_files/limit_test/limit_test.time -v ./seed_w $SEED_PARAMS > ./run.out
 
 
 # For time and memory usage, please add the following command:
