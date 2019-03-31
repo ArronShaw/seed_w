@@ -1,10 +1,10 @@
 # @Author: Weipeng Xu
 # @Date:   2019-02-27 21:57:58
 # @Last Modified by:   Weipeng Xu
-# @Last Modified time: 2019-03-30 23:57:29
+# @Last Modified time: 2019-03-31 11:25:05
 
-str_len=(1000 2000 4000 8000 16000 32000)
-str_num=(100 200 400 800)
+str_len=(1000 2000 4000 8000 16000 32000 64000 128000 256000)
+str_num=(100 200 400 800 1600 3200 6400)
 range=(10 20 40 80 160 320 640)
 word_num=(1 2 3 4 6 8)
 
