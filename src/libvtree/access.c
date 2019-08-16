@@ -1,4 +1,4 @@
-/*                               -*- Mode: C -*- 
+/*                               -*- Mode: C -*-
  * access.c --- access functions for an enhanced suffix array (vtree)
  * Author          : Truong Nguyen and Marcel Turcotte
  * Created On      : Mon Jun 20 20:09:40 2005
@@ -6,7 +6,7 @@
  * Last Modified On: Tue Nov 20 09:49:51 2018
  *
  * This copyrighted source code is freely distributed under the terms
- * of the GNU General Public License. 
+ * of the GNU General Public License.
  * See the files COPYRIGHT and LICENSE for details.
  */
 
@@ -18,10 +18,8 @@
  * new_interval3 - allocates and initialises an interval3 struct *
  *****************************************************************/
 
-static inline interval3_t *
-new_interval3( pos_t lcp, pos_t lb, pos_t rb )
-{
-  interval3_t *i = ( interval3_t * ) dev_malloc( sizeof( interval3_t ) );
+static inline interval3_t *new_interval3(pos_t lcp, pos_t lb, pos_t rb) {
+  interval3_t *i = (interval3_t *)dev_malloc(sizeof(interval3_t));
 
   i->lcp = lcp;
   i->lb = lb;
@@ -53,50 +51,48 @@ new_interval3( pos_t lcp, pos_t lb, pos_t rb )
  * }                                                             *
  *****************************************************************/
 
-#define push( elem ) dev_vector_add( stack, elem )
-#define pop() dev_vector_remove( stack )
-#define peek() dev_vector_get_last( stack )
+#define push(elem) dev_vector_add(stack, elem)
+#define pop() dev_vector_remove(stack)
+#define peek() dev_vector_get_last(stack)
 
-void
-vtree_traverse_with_array( vtree_t *v, void ( *f )( vtree_t *, interval3_t * ) )
-{
-  vector_t *stack = ( vector_t * ) dev_new_vector( 5, 5 );
+void vtree_traverse_with_array(vtree_t *v,
+                               void (*f)(vtree_t *, interval3_t *)) {
+  vector_t *stack = (vector_t *)dev_new_vector(5, 5);
   interval3_t *top, *interval = NULL;
 
-  top = new_interval3( 0, 0, -1 );
-  push( top );
+  top = new_interval3(0, 0, -1);
+  push(top);
 
-  for ( pos_t i=1; i<= v->length; i++ ) {
+  for (pos_t i = 1; i <= v->length; i++) {
 
-    pos_t lb = i-1;
+    pos_t lb = i - 1;
 
-    while ( v->lcptab[ i ] < top->lcp ) {
+    while (v->lcptab[i] < top->lcp) {
 
-      top->rb = i-1;
+      top->rb = i - 1;
 
-      if ( interval != NULL )
-	dev_free( interval );
+      if (interval != NULL)
+        dev_free(interval);
 
       interval = pop();
 
-      f( v, interval );
+      f(v, interval);
 
       top = peek();
 
       lb = top->lb;
     }
 
-    if ( v->lcptab[ i ] > top->lcp ) {
-      top = new_interval3( v->lcptab[ i ], lb, -1 );
-      push( top );
+    if (v->lcptab[i] > top->lcp) {
+      top = new_interval3(v->lcptab[i], lb, -1);
+      push(top);
     }
-
   }
 
   top = pop();
-  dev_free( top );
+  dev_free(top);
 
-  dev_free_vector( stack, free );
+  dev_free_vector(stack, free);
 }
 
 #undef push
@@ -107,10 +103,8 @@ vtree_traverse_with_array( vtree_t *v, void ( *f )( vtree_t *, interval3_t * ) )
  * new_interval4 - allocates and initialises an interval4 struct *
  *****************************************************************/
 
-static inline interval4_t *
-new_interval4( pos_t lcp, pos_t lb, pos_t rb )
-{
-  interval4_t *i = ( interval4_t * ) dev_malloc( sizeof( interval4_t ) );
+static inline interval4_t *new_interval4(pos_t lcp, pos_t lb, pos_t rb) {
+  interval4_t *i = (interval4_t *)dev_malloc(sizeof(interval4_t));
 
   i->lcp = lcp;
   i->lb = lb;
@@ -143,63 +137,60 @@ new_interval4( pos_t lcp, pos_t lb, pos_t rb )
  *  }								 *
  *****************************************************************/
 
-#define push( elem ) dev_vector_add( stack, elem )
-#define pop() dev_vector_remove( stack )
-#define peek() dev_vector_get_last( stack )
-#define add( list, elem ) dev_vector_add( list, elem )
+#define push(elem) dev_vector_add(stack, elem)
+#define pop() dev_vector_remove(stack)
+#define peek() dev_vector_get_last(stack)
+#define add(list, elem) dev_vector_add(list, elem)
 
-void
-vtree_traverse_and_process( vtree_t *v, void ( *f )( vtree_t *, interval4_t * ) )
-{
-  vector_t *stack = ( vector_t * ) dev_new_vector( 5, 5 );
+void vtree_traverse_and_process(vtree_t *v,
+                                void (*f)(vtree_t *, interval4_t *)) {
+  vector_t *stack = (vector_t *)dev_new_vector(5, 5);
   interval4_t *top, *lastInterval = NULL;
 
-  top = new_interval4( 0, 0, -1 );
-  push( top );
+  top = new_interval4(0, 0, -1);
+  push(top);
 
-  for ( pos_t i=1; i <= v->length; i++ ) {
+  for (pos_t i = 1; i <= v->length; i++) {
 
-    pos_t lb = i-1;
+    pos_t lb = i - 1;
 
-    while ( v->lcptab[ i ] < top->lcp ) {
+    while (v->lcptab[i] < top->lcp) {
 
-      top->rb = i-1;
+      top->rb = i - 1;
 
-      if ( lastInterval != NULL )
-	dev_free( lastInterval );
+      if (lastInterval != NULL)
+        dev_free(lastInterval);
 
       lastInterval = pop();
       top = peek();
 
-      f( v, lastInterval );
+      f(v, lastInterval);
 
       lb = lastInterval->lb;
 
-      if ( v->lcptab[ i ] <= top->lcp ) {
-	add( top->childList, lastInterval );
-	lastInterval = NULL;
+      if (v->lcptab[i] <= top->lcp) {
+        add(top->childList, lastInterval);
+        lastInterval = NULL;
       }
-
     }
 
-    if ( v->lcptab[ i ] > top->lcp ) {
+    if (v->lcptab[i] > top->lcp) {
 
-      top = new_interval4( v->lcptab[ i ], lb, -1 );
+      top = new_interval4(v->lcptab[i], lb, -1);
 
-      if ( lastInterval != NULL ) {
-	add( top->childList, lastInterval );
-	lastInterval = NULL;
+      if (lastInterval != NULL) {
+        add(top->childList, lastInterval);
+        lastInterval = NULL;
       }
 
-      push( top );
-
+      push(top);
     }
   }
 
   top = pop();
-  dev_free( top );
+  dev_free(top);
 
-  dev_free_vector( stack, free );
+  dev_free_vector(stack, free);
 }
 
 #undef push
@@ -211,10 +202,8 @@ vtree_traverse_and_process( vtree_t *v, void ( *f )( vtree_t *, interval4_t * ) 
  * new_interval2 - allocates and initialises an interval2 struct *
  *****************************************************************/
 
-interval2_t *
-new_interval2( pos_t i, pos_t j )
-{
-  interval2_t *interval = ( interval2_t * ) dev_malloc( sizeof( interval2_t ) );
+interval2_t *new_interval2(pos_t i, pos_t j) {
+  interval2_t *interval = (interval2_t *)dev_malloc(sizeof(interval2_t));
 
   interval->i = i;
   interval->j = j;
@@ -243,25 +232,23 @@ new_interval2( pos_t i, pos_t j )
  *  }								 *
  *****************************************************************/
 
-vector_t *
-vtree_getChildIntervals( vtree_t *v, interval2_t *i0 )
-{
+vector_t *vtree_getChildIntervals(vtree_t *v, interval2_t *i0) {
   /* tuned for nucleotides alphabet */
-  vector_t *intervalList = dev_new_vector( 5, 5 );
+  vector_t *intervalList = dev_new_vector(5, 5);
   pos_t i1, i2, val;
 
-  assert( i0->i != i0->j );
+  assert(i0->i != i0->j);
 
   /* special case for 0-[0..n] -- root of the tree */
 
-  if ( i0->j == v->length ) {
+  if (i0->j == v->length) {
 
-    i1 = vtree_get_childtab_next( v, i0->i );
-    dev_vector_add( intervalList, new_interval2( i0->i, i1 - 1 ) );
+    i1 = vtree_get_childtab_next(v, i0->i);
+    dev_vector_add(intervalList, new_interval2(i0->i, i1 - 1));
 
-    while ( vtree_get_childtab_next( v, i1 ) != -1 ) {
-      i2 = vtree_get_childtab_next( v, i1 );
-      dev_vector_add( intervalList, new_interval2( i1, i2 - 1 ) );
+    while (vtree_get_childtab_next(v, i1) != -1) {
+      i2 = vtree_get_childtab_next(v, i1);
+      dev_vector_add(intervalList, new_interval2(i1, i2 - 1));
       i1 = i2;
     }
 
@@ -270,22 +257,22 @@ vtree_getChildIntervals( vtree_t *v, interval2_t *i0 )
 
   /* general case -- internal node */
 
-  val = vtree_get_childtab_up( v, i0->j+1 );
+  val = vtree_get_childtab_up(v, i0->j + 1);
 
-  if ( i0->i < val && val <= i0->j )
+  if (i0->i < val && val <= i0->j)
     i1 = val;
   else
-    i1 = vtree_get_childtab_down( v, i0->i );
+    i1 = vtree_get_childtab_down(v, i0->i);
 
-  dev_vector_add( intervalList, new_interval2( i0->i, i1 - 1 ) );
+  dev_vector_add(intervalList, new_interval2(i0->i, i1 - 1));
 
-  while ( vtree_get_childtab_next( v, i1 ) != -1 ) {
-    i2 = vtree_get_childtab_next( v, i1 );
-    dev_vector_add( intervalList, new_interval2( i1, i2 - 1 ) );
+  while (vtree_get_childtab_next(v, i1) != -1) {
+    i2 = vtree_get_childtab_next(v, i1);
+    dev_vector_add(intervalList, new_interval2(i1, i2 - 1));
     i1 = i2;
   }
 
-  dev_vector_add( intervalList, new_interval2( i1, i0->j ) );
+  dev_vector_add(intervalList, new_interval2(i1, i0->j));
 
   return intervalList;
 }
@@ -295,26 +282,20 @@ vtree_getChildIntervals( vtree_t *v, interval2_t *i0 )
  * v : enhanced suffix array                                     *
  *****************************************************************/
 
-pos_t
-vtree_getlcp( vtree_t *v, pos_t i, pos_t j )
-{
-  pos_t val = vtree_get_childtab_up( v, j+1 );
+pos_t vtree_getlcp(vtree_t *v, pos_t i, pos_t j) {
+  pos_t val = vtree_get_childtab_up(v, j + 1);
 
-  if ( i < val && val <= j )
-    return v->lcptab[ val ];
+  if (i < val && val <= j)
+    return v->lcptab[val];
 
-  return v->lcptab[ vtree_get_childtab_down( v, i ) ];
+  return v->lcptab[vtree_get_childtab_down(v, i)];
 }
 
 /*****************************************************************
  * trivial_cmp -                                                 *
  *****************************************************************/
 
-static inline int
-trivial_cmp( symbol_t a, symbol_t b )
-{
-  return a == b;
-}
+static inline int trivial_cmp(symbol_t a, symbol_t b) { return a == b; }
 
 /*****************************************************************
  * vtree_getInterval - returns the interval2_t containing a      *
@@ -323,30 +304,29 @@ trivial_cmp( symbol_t a, symbol_t b )
  * cmp : comparator function                                     *
  *****************************************************************/
 
-interval2_t *
-vtree_getInterval( vtree_t *v, pos_t i, pos_t j, symbol_t a, int ( *cmp )( symbol_t, symbol_t ) )
-{
+interval2_t *vtree_getInterval(vtree_t *v, pos_t i, pos_t j, symbol_t a,
+                               int (*cmp)(symbol_t, symbol_t)) {
   pos_t i1, i2, val, l;
 
-  assert( i != j );
+  assert(i != j);
 
-  if ( cmp == NULL )
+  if (cmp == NULL)
     cmp = trivial_cmp;
 
   /* special case for 0-[0..n] -- root of the tree */
 
-  if ( j == v->length ) {
+  if (j == v->length) {
 
-    i1 = vtree_get_childtab_next( v, i );
+    i1 = vtree_get_childtab_next(v, i);
 
-    if ( cmp( v->text[ v->suftab[ i ] ], a ) )
-      return new_interval2( i, i1 - 1 );
+    if (cmp(v->text[v->suftab[i]], a))
+      return new_interval2(i, i1 - 1);
 
-    while ( vtree_get_childtab_next( v, i1 ) != -1 ) {
-      i2 = vtree_get_childtab_next( v, i1 );
+    while (vtree_get_childtab_next(v, i1) != -1) {
+      i2 = vtree_get_childtab_next(v, i1);
 
-      if ( cmp( v->text[ v->suftab[ i1 ] ], a ) )
-	return new_interval2( i1, i2 - 1 );
+      if (cmp(v->text[v->suftab[i1]], a))
+        return new_interval2(i1, i2 - 1);
 
       i1 = i2;
     }
@@ -356,28 +336,28 @@ vtree_getInterval( vtree_t *v, pos_t i, pos_t j, symbol_t a, int ( *cmp )( symbo
 
   /* general case -- internal node */
 
-  val = vtree_get_childtab_up( v, j+1 );
-  l = vtree_getlcp( v, i, j );
+  val = vtree_get_childtab_up(v, j + 1);
+  l = vtree_getlcp(v, i, j);
 
-  if ( i < val && val <= j )
+  if (i < val && val <= j)
     i1 = val;
   else
-    i1 = vtree_get_childtab_down( v, i );
+    i1 = vtree_get_childtab_down(v, i);
 
-  if ( cmp( v->text[ v->suftab[ i ] + l ], a ) )
-    return new_interval2( i, i1 - 1 );
+  if (cmp(v->text[v->suftab[i] + l], a))
+    return new_interval2(i, i1 - 1);
 
-  while ( vtree_get_childtab_next( v, i1 ) != -1 ) {
-    i2 = vtree_get_childtab_next( v, i1 );
+  while (vtree_get_childtab_next(v, i1) != -1) {
+    i2 = vtree_get_childtab_next(v, i1);
 
-      if ( cmp( v->text[ v->suftab[ i1 ] + l ], a ) )
-	return new_interval2( i1, i2 - 1 );
+    if (cmp(v->text[v->suftab[i1] + l], a))
+      return new_interval2(i1, i2 - 1);
 
     i1 = i2;
   }
 
-  if ( cmp( v->text[ v->suftab[ i1 ] + l ], a ) )
-    return new_interval2( i1, j );
+  if (cmp(v->text[v->suftab[i1] + l], a))
+    return new_interval2(i1, j);
 
   return NULL;
 }
@@ -404,129 +384,183 @@ vtree_getInterval( vtree_t *v, pos_t i, pos_t j, symbol_t a, int ( *cmp )( symbo
  *  }								 *
  *****************************************************************/
 
-void
-vtree_find_exact_match( vtree_t *v, dstring_t *p )
-{
-  int c=0;
+void vtree_find_exact_match(vtree_t *v, dstring_t *p) {
+  int c = 0;
   int queryFound = TRUE;
   interval2_t *interval;
   pos_t i, j, m = p->length;
 
-  interval = vtree_getInterval( v, 0, v->length, p->text[ c ], NULL );
+  interval = vtree_getInterval(v, 0, v->length, p->text[c], NULL);
 
-  if ( interval == NULL ) {
+  if (interval == NULL) {
     queryFound = FALSE;
   }
 
-  while ( ( interval != NULL ) && ( c < m ) && ( queryFound ) ) {
+  while ((interval != NULL) && (c < m) && (queryFound)) {
 
     i = interval->i;
     j = interval->j;
 
-    if ( i != j ) {
+    if (i != j) {
 
-      pos_t l = vtree_getlcp( v, i, j );
-      pos_t min = MIN( l, m );
+      pos_t l = vtree_getlcp(v, i, j);
+      pos_t min = MIN(l, m);
 
-      for ( pos_t k=c; k < min && queryFound; k++ )
-	if ( v->text[ v->suftab[ i ] + k ] != p->text[ k ] )
-	  queryFound = FALSE;
+      for (pos_t k = c; k < min && queryFound; k++)
+        if (v->text[v->suftab[i] + k] != p->text[k])
+          queryFound = FALSE;
 
       c = min;
 
-      if ( c < m ) {
+      if (c < m) {
 
-	interval = vtree_getInterval( v, i, j,  p->text[ c ], NULL );
+        interval = vtree_getInterval(v, i, j, p->text[c], NULL);
 
-	if ( interval == NULL ) {
-	  queryFound = FALSE;
-	}
-
+        if (interval == NULL) {
+          queryFound = FALSE;
+        }
       }
 
     } else {
 
-      for ( pos_t k=c+1; k < m && queryFound; k++ )
-	if ( v->text[ v->suftab[ i ] + k ] != p->text[ k ] )
-	  queryFound = FALSE;
+      for (pos_t k = c + 1; k < m && queryFound; k++)
+        if (v->text[v->suftab[i] + k] != p->text[k])
+          queryFound = FALSE;
       c = m; /* forces exit */
     }
   }
 
-  if ( ! queryFound ) {
+  if (!queryFound) {
 
-    printf( "pattern P not found" );
+    printf("pattern P not found");
 
   } else {
 
-    printf( "query found a position(s): " );
+    printf("query found a position(s): ");
 
-    for ( pos_t k=i; k<=j; k++ ) {
-      if ( k>i )
-	printf( ", " );
-      printf( "%d", v->suftab[ k ] );
+    for (pos_t k = i; k <= j; k++) {
+      if (k > i)
+        printf(", ");
+      printf("%d", v->suftab[k]);
     }
-    printf( "\n" );
-
+    printf("\n");
   }
 }
 
-int
-vtree_find_exact_match_new( vtree_t *v, dstring_t *p )
-{
-  int c=0;
+int vtree_find_exact_match_new(vtree_t *v, dstring_t *p) {
+  int c = 0;
   int queryFound = TRUE;
   interval2_t *interval;
   pos_t i, j, m = p->length;
 
-  interval = vtree_getInterval( v, 0, v->length, p->text[ c ], NULL );
+  interval = vtree_getInterval(v, 0, v->length, p->text[c], NULL);
 
-  if ( interval == NULL ) {
+  if (interval == NULL) {
     queryFound = FALSE;
   }
 
-  while ( ( interval != NULL ) && ( c < m ) && ( queryFound ) ) {
+  while ((interval != NULL) && (c < m) && (queryFound)) {
 
     i = interval->i;
     j = interval->j;
 
-    if ( i != j ) {
+    if (i != j) {
 
-      pos_t l = vtree_getlcp( v, i, j );
-      pos_t min = MIN( l, m );
+      pos_t l = vtree_getlcp(v, i, j);
+      pos_t min = MIN(l, m);
 
-      for ( pos_t k=c; k < min && queryFound; k++ )
-	if ( v->text[ v->suftab[ i ] + k ] != p->text[ k ] )
-	  queryFound = FALSE;
+      for (pos_t k = c; k < min && queryFound; k++)
+        if (v->text[v->suftab[i] + k] != p->text[k])
+          queryFound = FALSE;
 
       c = min;
 
-      if ( c < m ) {
-  dev_free( interval );
-	interval = vtree_getInterval( v, i, j,  p->text[ c ], NULL );
+      if (c < m) {
+        dev_free(interval);
+        interval = vtree_getInterval(v, i, j, p->text[c], NULL);
 
-	if ( interval == NULL ) {
-	  queryFound = FALSE;
-	}
+        if (interval == NULL) {
+          queryFound = FALSE;
+        }
+      }
+    } else {
 
+      for (pos_t k = c + 1; k < m && queryFound; k++)
+        if (v->text[v->suftab[i] + k] != p->text[k])
+          queryFound = FALSE;
+      c = m; /* forces exit */
+    }
+  }
+
+  dev_free(interval);
+
+  if (!queryFound) {
+    return 0;
+  } else {
+    return 1;
+  }
+}
+
+int vtree_find_match(vtree_t *v, dstring_t *p, int max_mis_match) {
+  int c = 0;
+  int queryFound = TRUE;
+  int mis_match = 0;
+  interval2_t *interval;
+  pos_t i, j, m = p->length;
+
+  interval = vtree_getInterval(v, 0, v->length, p->text[c], NULL);
+
+  if (interval == NULL) {
+    queryFound = FALSE;
+  }
+
+  while ((interval != NULL) && (c < m) && (queryFound)) {
+
+    i = interval->i;
+    j = interval->j;
+
+    if (i != j) {
+
+      pos_t l = vtree_getlcp(v, i, j);
+      pos_t min = MIN(l, m);
+
+      for (pos_t k = c; k < min && queryFound; k++) {
+        if (v->text[v->suftab[i] + k] != p->text[k]) {
+          if (++mis_match <= max_mis_match)
+            continue;
+          else
+            queryFound = FALSE;
+        }
+      }
+      c = min;
+
+      if (c < m) {
+        dev_free(interval);
+        interval = vtree_getInterval(v, i, j, p->text[c], NULL);
+
+        if (interval == NULL) {
+          queryFound = FALSE;
+        }
       }
 
     } else {
 
-      for ( pos_t k=c+1; k < m && queryFound; k++ )
-	if ( v->text[ v->suftab[ i ] + k ] != p->text[ k ] )
-	  queryFound = FALSE;
+      for (pos_t k = c + 1; k < m && queryFound; k++)
+        if (v->text[v->suftab[i] + k] != p->text[k]) {
+          if (++mis_match <= max_mis_match)
+            continue;
+          else
+            queryFound = FALSE;
+        }
       c = m; /* forces exit */
     }
   }
-  
-  dev_free( interval );
 
-  if ( ! queryFound ) {
-    // printf( "pattern P not found" );
+  dev_free(interval);
+
+  if (!queryFound) {
     return 0;
   } else {
-    // printf( "query found a position(s): " );
     return 1;
   }
 }
