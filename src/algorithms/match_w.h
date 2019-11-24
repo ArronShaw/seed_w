@@ -101,12 +101,12 @@ static code_t codes_upper[] =
 
 static alphabet_t uppercase = {codes_upper, 27, 27};
 
-extern vector_t *dev_new_vector();
+// extern vector_t *dev_new_vector();
 
-extern int match_edge(dstring_t *ds_seed, vtree_t *v, interval2_t *interval, expression *e, int pos, int offset);
+// extern int match_edge(dstring_t *ds_seed, vtree_t *v, interval2_t *interval, expression *e, int pos, int offset, int mis_match_word);
 
-extern int match_node(dstring_t *ds_seed, vtree_t *v, interval2_t *interval, expression *e, int pos, int offset);
+// extern int match_node(dstring_t *ds_seed, vtree_t *v, interval2_t *interval, expression *e, int pos, int offset, int mis_match_word);
 
-extern int match_motif(dstring_t *ds_seed, interval2_t *i0, vtree_t *v, motif *m);
+// extern int match_motif(dstring_t *ds_seed, interval2_t *i0, vtree_t *v, motif *m, int mis_match_word);
 
-extern void print_expression(char *seed, expression *e);
+// extern void print_expression(char *seed, expression *e);

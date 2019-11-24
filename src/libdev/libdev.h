@@ -41,7 +41,7 @@
 #define MAX( a, b )         ( ( ( a ) > ( b ) ) ? ( a ) : ( b ) )
 #endif
 
-#define DEFAULT_DEBUG_LEVEL 0
+#define DEFAULT_DEBUG_LEVEL 1
 
 /* 0 - quiet
  * 1 - general traces

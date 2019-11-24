@@ -15,13 +15,13 @@
 #include "match_w.h"
 #include "seed_w.h"
 int match_motif(dstring_t *ds_seed, interval2_t *i0, vtree_t *v, motif *m,
-                parameters_t *params, int mis_match_word);
+                parameters_t *params, int mis_match_motif);
 int match_node(dstring_t *ds_seed, vtree_t *v, interval2_t *interval,
                expression *e, int pos, int offset, parameters_t *params,
-               int mis_match_word);
+               int mis_match_motif);
 int match_edge(dstring_t *ds_seed, vtree_t *v, interval2_t *interval,
                expression *e, int pos, int offset, parameters_t *params,
-               int mis_match_word);
+               int mis_match_motif);
 
 int getCharfromWord(dstring_t *ds_seed, expression *e, int offset) {
   return ds_seed->text[e->begin_index + offset];
@@ -31,7 +31,7 @@ int error_case() { return -1; }
 
 int match_node(dstring_t *ds_seed, vtree_t *v, interval2_t *interval,
                expression *e, int pos, int offset, parameters_t *params,
-               int mis_match_word) {
+               int mis_match_motif) {
 
   int queryFound = FALSE;
 
@@ -44,7 +44,7 @@ int match_node(dstring_t *ds_seed, vtree_t *v, interval2_t *interval,
     // take out childs one by one
     interval2_t *child = (interval2_t *)dev_vector_serve(childs);
 
-    if (match_edge(ds_seed, v, child, e, pos, offset, params, mis_match_word))
+    if (match_edge(ds_seed, v, child, e, pos, offset, params, mis_match_motif))
       queryFound = TRUE;
 
     dev_free(child);
@@ -57,7 +57,7 @@ int match_node(dstring_t *ds_seed, vtree_t *v, interval2_t *interval,
 
 int match_edge(dstring_t *ds_seed, vtree_t *v, interval2_t *interval,
                expression *e, int pos, int offset, parameters_t *params,
-               int mis_match_word) {
+               int mis_match_motif) {
 
   int result;
 
@@ -72,7 +72,7 @@ int match_edge(dstring_t *ds_seed, vtree_t *v, interval2_t *interval,
       pos == vtree_getlcp(v, interval->i, interval->j)) { // ???
 
     return match_node(ds_seed, v, interval, e, pos, offset, params,
-                      mis_match_word);
+                      mis_match_motif);
   }
 
   /* else, which is at an edge*/
@@ -82,7 +82,7 @@ int match_edge(dstring_t *ds_seed, vtree_t *v, interval2_t *interval,
 
     if (offset >= e->length) {
       return match_edge(ds_seed, v, interval, e->next, pos, 0, params,
-                        mis_match_word);
+                        mis_match_motif);
     }
 
     int a = v->text[v->suftab[interval->i] + pos];
@@ -95,11 +95,11 @@ int match_edge(dstring_t *ds_seed, vtree_t *v, interval2_t *interval,
     // if(a != b) return FALSE;
 
     if (a != b) {
-      if (mis_match_word < params->mis_match_word) {
+      if (mis_match_motif < params->mis_match_motif) {
         // return match_edge();
         result = match_edge(ds_seed, v, interval, e, pos + 1, offset + 1,
-                            params, ++mis_match_word);
-        // printf("Mismatch = %d\n", params->mis_match_word);
+                            params, ++mis_match_motif);
+        // printf("Mismatch = %d\n", params->mis_match_motif);
       } else {
         return FALSE;
       }
@@ -108,15 +108,37 @@ int match_edge(dstring_t *ds_seed, vtree_t *v, interval2_t *interval,
     else {
       // a == b, continue to compare next character
       result = match_edge(ds_seed, v, interval, e, pos + 1, offset + 1, params,
-                          mis_match_word);
+                          mis_match_motif);
     }
 
     break;
 
   case enum_range:
-    if (offset >= e->length)
-      result = match_edge(ds_seed, v, interval, e->next, pos, 0, params,
-                          mis_match_word);
+
+    // if (offset >= e->length)
+    //   result = match_edge(ds_seed, v, interval, e->next, pos, 0, params, 0);
+
+    if (offset >= (e->length - params->range_delta)) {
+      //
+      if (offset < (e->length + params->range_delta)) {
+        // If within delta range
+        // 1. try match word
+        result = match_edge(ds_seed, v, interval, e->next, pos, 0, params, 0);
+
+        // 2. skip current character
+        if (result != TRUE) {
+          a = v->text[v->suftab[interval->i] + pos];
+          if (ister(a))
+            return FALSE;
+
+          result = match_edge(ds_seed, v, interval, e, pos + 1, offset + 1,
+                              params, mis_match_motif);
+        }
+      } else {
+        // Outside range delta, match word
+        result = match_edge(ds_seed, v, interval, e->next, pos, 0, params, 0);
+      }
+    }
 
     else {
       a = v->text[v->suftab[interval->i] + pos];
@@ -124,8 +146,9 @@ int match_edge(dstring_t *ds_seed, vtree_t *v, interval2_t *interval,
         return FALSE;
 
       result = match_edge(ds_seed, v, interval, e, pos + 1, offset + 1, params,
-                          mis_match_word);
+                          mis_match_motif);
     }
+
     break;
 
   default:
@@ -134,12 +157,12 @@ int match_edge(dstring_t *ds_seed, vtree_t *v, interval2_t *interval,
 }
 
 int match_motif(dstring_t *ds_seed, interval2_t *i0, vtree_t *v, motif *m,
-                parameters_t *params, int mis_match_word) {
+                parameters_t *params, int mis_match_motif) {
   // expect TRUE/FALSE indeicate if a motif is exist in a vtree or not
   // mismatch are not allowed in this version 1.0, will be improved in 1.1
   // version
 
-  return match_node(ds_seed, v, i0, m->head, 0, 0, params, mis_match_word);
+  return match_node(ds_seed, v, i0, m->head, 0, 0, params, mis_match_motif);
 }
 
 void print_expression(char *seed, expression *e) {

@@ -56,7 +56,8 @@ where file is a FASTA file that contains k input DNA/RNA sequences.\n\
 Options:\n\
      --min_support <n>         (default 0.70)\n\
      --word_length <n>         (default 3)\n\
-  -m --mis_match_word <n>      (default 0)\n\
+  -m --mis_match_motif <n>     (default 0)\n\
+  -r --range_delta <n>         (default 0)\n\
   -o --match_file <file>       (no default)\n\
   -v --version\n\
   -h --help\n\
@@ -119,7 +120,8 @@ static void param_init(parameters_t *params) {
   params->min_support = MIN_SUPPORT;
   params->word_length = WORD_LENGTH;
   params->version = VERSION;
-  params->mis_match_word = MIS_MATCH_WORD;
+  params->mis_match_motif = MIS_MATCH_MOTIF;
+  params->range_delta = RANGE_DELTA;
   params->match_count = 0;
 }
 
@@ -173,8 +175,13 @@ static void process_argv(int argc, char *argv[], parameters_t *params) {
     }
 
     else if (strcmp("-m", argv[i]) == 0 ||
-             strcmp("--mis_match_word", argv[i]) == 0) {
-      params->mis_match_word = dev_parse_int(argv[++i]);
+             strcmp("--mis_match_motif", argv[i]) == 0) {
+      params->mis_match_motif = dev_parse_int(argv[++i]);
+    }
+
+    else if (strcmp("-r", argv[i]) == 0 ||
+             strcmp("--range_delta", argv[i]) == 0) {
+      params->range_delta = dev_parse_int(argv[++i]);
     }
 
     else {
@@ -318,7 +325,8 @@ vector_t *words_enumerate(char seed[], vtree_t *vtree[], parameters_t *params) {
     pattern->length = pattern->length - 1; // This is necessary
 
     for (int str_index = 1; str_index < NUM_INPUT_STRING; str_index++) {
-      if (vtree_find_match(vtree[str_index], pattern, params->mis_match_word)) {
+      if (vtree_find_match(vtree[str_index], pattern,
+                           params->mis_match_motif)) {
         cur_support++;
       }
     }
@@ -416,7 +424,7 @@ motif *motif_concatenate(motif *motif_a, motif *motif_b) {
 }
 
 int match_motif(dstring_t *ds_seed, interval2_t *i0, vtree_t *v, motif *m,
-                parameters_t *params, int mis_match_word);
+                parameters_t *params, int mis_match_motif);
 
 int has_enough_support(dstring_t *ds_seed, vtree_t *vtree[], motif *query_motif,
                        int *support, parameters_t *params) {
