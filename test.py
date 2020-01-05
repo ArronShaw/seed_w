@@ -6,24 +6,28 @@ TEST_FOLDER = ["str_len", "str_num", "range", "word_num"]
 TIME_OUTPUT = "time.out"
 CSV_OUT = "results.csv"
 # TIME_FORMAT = "-f '%C \nreal:%e \nuser:%U \nsys:%S \nMaxMem(Kb):%M \nAveMem(Kb):%t \nAveTolMem(Kb):%K' -a -o " + TIME_OUTPUT
-#TIME_FORMAT = "-f '%C \n%e \n%U \n%S \n%M \n%t \n%K' -a -o " + TIME_OUTPUT
-TIME_FORMAT = "-f '%C \n' -v -a -o " + TIME_OUTPUT
+TIME_FORMAT = "-f '%C \n%e \n%U \n%S \n%M \n%t \n%K' -a -o " + TIME_OUTPUT
+# TIME_FORMAT = "-f '%C \n' -v -a -o " + TIME_OUTPUT
 
-str_len = ['1000', '2000', '4000', '8000', '160000', '32000']
-str_num = ['100', '200', '400', '800', '1600', '3200']
-range_len = ['10', '20', '40', '80', '160', '320']
-word_num = ['1', '2', '3', '4', '6', '8']
+#str_len = ['1000', '2000', '4000', '8000', '16000', '32000', '64000']
+str_len = ['1000']
+#str_num = ['100', '200', '400', '800', '1600', '3200', '6400']
+str_num = ['100']
+# range_len = ['10', '20', '40', '80', '160', '320', '640']
+range_len = ['640']
+# word_num = ['1', '2', '3', '4', '6', '8']
+word_num = ['1']
 
 def print_pwd():
     print (ENTER_FOLDER + os.getcwd())
 
 def excute(num):
-
     SEED_PARAMS = " --min_support 1" + " --word_length 10" \
     + " --mis_match_motif 2" + " --match_file save_motifs.xml"
     DATA_POS= " " + str(num) + "_pos.fas"
     DATA_NEG= " " + str(num) + "_neg.fas"
-
+    # /usr/bin/time -v  on Linux
+    # /time -l          on MacOS
     cmd_1 = "/usr/bin/time " + TIME_FORMAT 
     cmd_2 = " ../../seed_w " + SEED_PARAMS + DATA_POS + DATA_NEG + " > ./run.out"
     cmd = cmd_1 + cmd_2 
@@ -64,11 +68,12 @@ for dir in TEST_FOLDER:
         len = word_num
     else: 
         len = 0
+    
     for i in len:
         excute(i)
-        break
+        # break
     
-    break #test_folder
+    # break #test_folder
     #os.chdir(PARENT_FOLDER)
 
 
